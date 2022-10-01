@@ -102,12 +102,12 @@ def _compute_linear_grad_sample(layer: nn.Linear, A: torch.Tensor, B: torch.Tens
             if hasattr(layer, "use_gc"):
                 use_gc = layer.use_gc
             else:
-                L = torch.prod(torch.Tensor(list(A.shape[1:-1])))
-                assert L == torch.prod(torch.Tensor(list(B.shape[1:-1])))
+                T = torch.prod(torch.Tensor(list(A.shape[1:-1])))
+                assert T == torch.prod(torch.Tensor(list(B.shape[1:-1])))
 
-                d = A.shape[-1]
+                D = A.shape[-1]
                 p = B.shape[-1]  # torch.prod(torch.Tensor(list(B.shape[2:])))
-                use_gc = (2*L**2 <= d*p)
+                use_gc = (2*L**2 <= D*p)
                 layer.use_gc = use_gc
         else:
             use_gc = True
@@ -261,11 +261,11 @@ def _compute_conv_grad_sample(layer, A: torch.Tensor, B: torch.Tensor, batch_dim
             if hasattr(layer, "use_gc"):
                 use_gc = layer.use_gc
             else:
-                L = unfold_x.size(-1)
-                assert L == g_.shape[-1]
-                d = unfold_x.shape[1]
+                T = unfold_x.size(-1)
+                assert T == g_.shape[-1]
+                D = unfold_x.shape[1]
                 p = g_.shape[1] 
-                use_gc = (2*L**2 <= d*p)
+                use_gc = (2*L**2 <= D*p)
                 layer.use_gc = use_gc
         else:
             use_gc = True
