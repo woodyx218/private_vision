@@ -31,7 +31,7 @@ def _light_linear_weight_norm_sample(A, B) -> torch.Tensor:
     """Compute gradient sample norm for the weight matrix in a linear layer."""
     if A.dim() == 2:
         return _light_linear_weight_norm_sample_non_sequential(A, B)
-    elif A.dim() == 3:
+    elif A.dim() >= 3:
         return _light_linear_weight_norm_sample_sequential(A, B)
     else:
         raise ValueError(
@@ -44,7 +44,6 @@ def _light_linear_weight_norm_sample_sequential(A, B):
         (torch.bmm(A, A.transpose(-1, -2)) *
          torch.bmm(B, B.transpose(-1, -2))).sum(dim=(1, 2))
     )
-
 
 def _light_linear_weight_norm_sample_non_sequential(A, B):
     """The Goodfellow trick, i.e., Frobenius norm equal to product of 2-norms."""
@@ -112,6 +111,11 @@ def _compute_linear_grad_sample(layer: nn.Linear, A: torch.Tensor, B: torch.Tens
                 layer.use_gc = use_gc
         else:
             use_gc = True
+        
+        if A.dim()>=3:
+            A=torch.flatten(A,start_dim=1,end_dim=-2)
+            B=torch.flatten(B,start_dim=1,end_dim=-2)
+
         if use_gc:
             _create_or_extend_norm_sample(
                 layer.weight, _light_linear_weight_norm_sample(A, B))
@@ -119,9 +123,6 @@ def _compute_linear_grad_sample(layer: nn.Linear, A: torch.Tensor, B: torch.Tens
             if A.dim()==2:
                 grads = torch.einsum('bd, bp-> bdp', A, B)
             else:
-                A=torch.flatten(A,start_dim=1,end_dim=-2)
-                B=torch.flatten(B,start_dim=1,end_dim=-2)
-
                 grads = torch.einsum('bTd, bTp-> bdp', A, B)
             gnorm = torch.sqrt(torch.sum(grads**2, dim=(1, 2)))
             _create_or_extend_norm_sample(layer.weight, gnorm)
