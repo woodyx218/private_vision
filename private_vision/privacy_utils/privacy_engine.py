@@ -185,7 +185,7 @@ class PrivacyEngine(object):
         self._locked = False
 
     def attach(self, optimizer):
-        autograd_grad_sample.add_hooks(model=self.module, batch_first=True, loss_reduction="sum")
+        autograd_grad_sample.add_hooks(model=self.module, loss_reduction="sum")
 
         # Override zero grad.
         def dp_zero_grad(_self, *args, **kwargs):
