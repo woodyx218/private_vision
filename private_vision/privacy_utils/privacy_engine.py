@@ -344,7 +344,7 @@ class PrivacyEngine(object):
         """Get per-example norms."""
         for name,param in self.named_params:
           if hasattr(param,'norm_sample')==False:
-            print(name)
+            print(name, ' is not supported by the privacy engine, please freeze this module before training.')
 
         norm_sample = torch.stack([param.norm_sample for name, param in self.named_params], dim=0).norm(2, dim=0)
         return norm_sample
