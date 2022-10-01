@@ -107,7 +107,7 @@ def _compute_linear_grad_sample(layer: nn.Linear, A: torch.Tensor, B: torch.Tens
 
                 D = A.shape[-1]
                 p = B.shape[-1]  # torch.prod(torch.Tensor(list(B.shape[2:])))
-                use_gc = (2*L**2 <= D*p)
+                use_gc = (2*T**2 <= D*p)
                 layer.use_gc = use_gc
         else:
             use_gc = True
@@ -265,7 +265,7 @@ def _compute_conv_grad_sample(layer, A: torch.Tensor, B: torch.Tensor, batch_dim
                 assert T == g_.shape[-1]
                 D = unfold_x.shape[1]
                 p = g_.shape[1] 
-                use_gc = (2*L**2 <= D*p)
+                use_gc = (2*T**2 <= D*p)
                 layer.use_gc = use_gc
         else:
             use_gc = True
@@ -312,7 +312,7 @@ def unfold3d(
         dilation: the spacing between the kernel points.
 
     Returns:
-        A tensor of shape ``(B, C * np.product(kernel_size), L)``, where L - output spatial dimensions.
+        A tensor of shape ``(B, C * np.product(kernel_size), T)``, where T - output spatial dimensions.
         See :class:`torch.nn.Unfold` for more details
 
     Example:
