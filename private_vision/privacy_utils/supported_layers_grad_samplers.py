@@ -16,7 +16,8 @@ from torch.functional import F
 from functools import partial
 
 from . import autograd_grad_sample
-
+import numpy as np
+from typing import Tuple,Union
 
 def sum_over_all_but_batch_and_last_n(tensor: torch.Tensor, n_dims: int) -> torch.Tensor:
     if tensor.dim() == n_dims + 1:
@@ -341,11 +342,11 @@ def unfold3d(
         total_pad_D = dilation[0] * (kernel_size[0] - 1)
         total_pad_H = dilation[1] * (kernel_size[1] - 1)
         total_pad_W = dilation[2] * (kernel_size[2] - 1)
-        pad_D_left = math.floor(total_pad_D / 2)
+        pad_D_left = np.floor(total_pad_D / 2)
         pad_D_right = total_pad_D - pad_D_left
-        pad_H_left = math.floor(total_pad_H / 2)
+        pad_H_left = np.floor(total_pad_H / 2)
         pad_H_right = total_pad_H - pad_H_left
-        pad_W_left = math.floor(total_pad_W / 2)
+        pad_W_left = np.floor(total_pad_W / 2)
         pad_W_right = total_pad_W - pad_W_left
 
     elif padding == "valid":
@@ -394,7 +395,7 @@ def unfold3d(
 
 
 
-[docs]def filter_dilated_rows(
+def filter_dilated_rows(
     tensor: torch.Tensor,
     dilation: Tuple[int, int, int],
     dilated_kernel_size: Tuple[int, int, int],
