@@ -97,11 +97,6 @@ def add_hooks(
         loss_reduction: Indicates if the loss reduction (for aggregating the
             gradients) is a sum or a mean operation. Can take values ``sum`` or
             ``mean``.
-        batch_first: Flag to indicate if the input tensor to the corresponding module
-            has the first dimension represent the batch, for example of shape
-            ``[batch_size, ..., ...]``. Set to True if batch appears in first
-            dimension else set to False (``batch_first=False`` implies that the
-            batch is always in the second dimension).
     """
     if hasattr(model, "autograd_grad_sample_hooks"):
         raise ValueError("Trying to add hooks twice to the same model")
@@ -185,14 +180,13 @@ def _capture_backprops(
     inputs: Tuple[torch.Tensor],
     outputs: Tuple[torch.Tensor],
     loss_reduction: str,
-    batch_first: bool,
 ):
     """Backward hook handler captures grad_outputs."""
     if _hooks_disabled:
         return
 
     backprops = outputs[0].detach()
-    _compute_grad_sample(layer, backprops, loss_reduction, batch_first)
+    _compute_grad_sample(layer, backprops, loss_reduction)
 
 
 def _compute_grad_sample(layer: nn.Module, backprops: torch.Tensor, loss_reduction: str):
