@@ -1,58 +1,34 @@
 '''Train CIFAR10 with PyTorch.'''
-##!python main_ViT.py --model 'resnet18' --cifar_data CIFAR10 --epochs 1 --lr 0.001 --bs 1000 --mini_batch_size 80 --mode 'ghost_mixed' --no-warnings --single_iteration
-from torchvision.transforms.transforms import Resize
-# import models
+##!python main_ViT.py --model $model_name --cifar_data CIFAR10 --epochs 1 --lr 0.001 --bs 1000 --mini_batch_size 25 --mode 'ghost_mixed' --pretrained 0import argparse
 import argparse
-import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
-import torch.backends.cudnn as cudnn
 
 import torchvision
 import torchvision.transforms as transforms
 
 from opacus.validators import ModuleValidator
 from opacus.accountants.utils import get_noise_multiplier
-import sys
-sys.path.insert(0, '/content/private_vision')
 from private_vision import PrivacyEngine
-# import private_transformers
-# import vit_pytorch
-# from vit_pytorch import ViT
-# from vit_pytorch.scalable_vit import ScalableViT
 import opacus
 from tqdm import tqdm
 import warnings
 import timm
 
 def prepare(args):
-
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    global best_acc
-    best_acc = 0  # best test accuracy
-    start_epoch = 0  # start from epoch 0 or last checkpoint epoch
+    device=torch.device("cuda")
 
     # Data
     print('==> Preparing data..')
 
-    if args.augment:
-        transform_train = transforms.Compose([
-            transforms.Resize(224),
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465),
-                                (0.2023, 0.1994, 0.2010)),
-        ])
-    else:
-        transform_train = transforms.Compose([
-            transforms.Resize(224),
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465),
-                                (0.2023, 0.1994, 0.2010)),
-        ])
+    transform_train = transforms.Compose([
+        transforms.Resize(224),
+        transforms.ToTensor(),
+        transforms.Normalize((0.4914, 0.4822, 0.4465),
+                            (0.2023, 0.1994, 0.2010)),
+    ])
     transform_test = transforms.Compose([
         transforms.Resize(224),
         transforms.ToTensor(),
@@ -86,6 +62,7 @@ def prepare(args):
 
     net = timm.create_model(args.model,pretrained=args.pretrained,num_classes=NUM_CLASSES)
     net = ModuleValidator.fix(net)
+    net = net.to(device)
 
     if 'convit' in args.model:
         for name,param in net.named_parameters():
@@ -94,16 +71,13 @@ def prepare(args):
     if 'beit' in args.model:
         for name,param in net.named_parameters():
             if 'gamma_' in name or 'relative_position_bias_table' in name or 'attn.qkv.weight' in name or 'attn.q_bias' in name or 'attn.v_bias' in name:
-                requires_grad=False
+                param.requires_grad=False
 
 
     for name,param in net.named_parameters():
         if 'cls_token' in name or 'pos_embed' in name:
             param.requires_grad=False
 
-    if device == 'cuda':
-        net = torch.nn.DataParallel(net)
-        cudnn.benchmark = True
 
     print('number of parameters: ', sum([p.numel() for p in net.parameters()]))
 
@@ -189,24 +163,19 @@ def prepare(args):
             print(epoch, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                                 % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
-    return start_epoch, args.epochs, train, test
-def main(start_epoch, epochs, trainf, testf, args):
+    return args.epochs, train, test
+    
+def main(epochs, trainf, testf, args):
     for epoch in range(epochs):
         trainf(epoch)
         # testf(epoch)
-    # for epoch in range(start_epoch, start_epoch+epochs):
-    #     trainf(epoch)
-    #     if not args.max_batch_size:
-    #         testf(epoch)
-    #     # scheduler.step()
+
 
 
 if __name__ == '__main__':
-    from pytorch_memlab import LineProfiler
 
     parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
     parser.add_argument('--lr', default=0.001, type=float, help='learning rate')
-    parser.add_argument('--scheduler', default='', type=str)
     parser.add_argument('--epochs', default=1, type=int,
                         help='numter of epochs')
     parser.add_argument('--bs', default=1000, type=int, help='batch size')
@@ -216,36 +185,12 @@ if __name__ == '__main__':
     parser.add_argument('--mode', default='unfold-flex-mem',
                         type=str, help='unfold, unfold-flex, opacus or non-private')
     parser.add_argument('--model', default='ResNet18', type=str)
-    parser.add_argument('--augment', action='store_true')
-    parser.add_argument('--save', action='store_true')
-    parser.add_argument('--no-warnings', action='store_true')
-    parser.add_argument('--max-batch-size', action='store_true')
-    parser.add_argument('--mbs-niter', default=-1, type=int)
-    parser.add_argument('--profmem', action='store_true')
-    parser.add_argument('--resume', '-r', action='store_true',
-                        help='resume from checkpoint')
     parser.add_argument('--mini_batch_size', type=int, default=50)
     parser.add_argument('--pretrained', type=int, default=1)
     parser.add_argument('--cifar_data', type=str, default='CIFAR10')
-    parser.add_argument('--single_iteration', action='store_true')
 
     args = parser.parse_args()
-    if args.no_warnings:
-        warnings.filterwarnings("ignore")
+    warnings.filterwarnings("ignore")
 
-    if args.max_batch_size:
-        try:
-            start_epoch, epochs, trainf, testf = prepare(args)
-            main(start_epoch, epochs, trainf, testf, args)
-            print(f"bs = {args.bs},mini_bs = {args.mini_batch_size}, mode: {args.mode}, model: {args.model}, success\n")
-        except RuntimeError as e:
-            print(f"bs = {args.bs},mini_bs = {args.mini_batch_size}, mode: {args.mode}, model: {args.model}, failed\n")
-    else:
-        if args.profmem:
-            with LineProfiler(main) as prof:
-                start_epoch, epochs, trainf, testf = prepare(args)
-                main(start_epoch, epochs, trainf, testf, args)
-            print(prof.display())
-        else:
-            start_epoch, epochs, trainf, testf = prepare(args)
-            main(start_epoch, epochs, trainf, testf, args)
+    epochs, trainf, testf = prepare(args)
+    main(epochs, trainf, testf, args)
