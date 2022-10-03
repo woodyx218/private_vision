@@ -1,5 +1,4 @@
-'''Train CIFAR10 with PyTorch.'''
-##!python main_ViT.py --model $model_name --cifar_data CIFAR10 --epochs 1 --lr 0.001 --bs 1000 --mini_batch_size 25 --mode 'ghost_mixed' --pretrained 0import argparse
+'''Train CIFAR10 / CIFAR100 with PyTorch.'''
 import argparse
 import torch
 import torch.nn as nn
@@ -138,7 +137,6 @@ def prepare(args):
             _, predicted = outputs.max(1)
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
-            break
 
         print(epoch, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                             % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
@@ -168,7 +166,7 @@ def prepare(args):
 def main(epochs, trainf, testf, args):
     for epoch in range(epochs):
         trainf(epoch)
-        # testf(epoch)
+        testf(epoch)
 
 
 
