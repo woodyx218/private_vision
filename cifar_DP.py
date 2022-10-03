@@ -62,11 +62,21 @@ def prepare(args):
     net = timm.create_model(args.model,pretrained=args.pretrained,num_classes=NUM_CLASSES)
     net = ModuleValidator.fix(net)
     net = net.to(device)
+    if 'xcit' in args.model:
+      for name,param in net.named_parameters():
+          if 'gamma' in name or 'attn.temperature' in name:
+            param.requires_grad=False
+            
+    if 'cait' in args.model:
+      for name,param in net.named_parameters():
+          if 'gamma_' in name:
+            param.requires_grad=False
 
     if 'convit' in args.model:
         for name,param in net.named_parameters():
             if 'attn.gating_param' in name:
                 param.requires_grad=False
+                
     if 'beit' in args.model:
         for name,param in net.named_parameters():
             if 'gamma_' in name or 'relative_position_bias_table' in name or 'attn.qkv.weight' in name or 'attn.q_bias' in name or 'attn.v_bias' in name:
