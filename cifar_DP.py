@@ -180,7 +180,7 @@ if __name__ == '__main__':
     parser.add_argument('--eps', default=2, type=float, help='target epsilon')
     parser.add_argument('--grad_norm', '-gn', default=0.1,
                         type=float, help='max grad norm')
-    parser.add_argument('--mode', default='unfold-flex-mem',
+    parser.add_argument('--mode', default='ghost_mixed',
                         type=str, help='unfold, unfold-flex, opacus or non-private')
     parser.add_argument('--model', default='resnet18', type=str)
     parser.add_argument('--mini_bs', type=int, default=50)
