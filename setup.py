@@ -12,7 +12,7 @@ with open(os.path.join(here, 'private_vision', '__init__.py')) as f:
     else:
         raise RuntimeError("Unable to find __version__ string.")
 
-with open(os.path.join(here, 'README.md')) as f:
+with open(os.path.join(here, 'README.md'), encoding="utf8") as f:
     readme = f.read()
 
 setuptools.setup(
