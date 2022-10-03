@@ -128,8 +128,10 @@ for i, batch in enumerate(dataloader):
 * nn.Conv3d (this work)
 * nn.Linear (4D; this work)
 
-These modules allow us to train the following models from `timm` (this list is non-exclusive):
-
+These modules allow us to train most of the models from `timm` (this list is non-exclusive):
+```python
+...
+```
 
 <!--
 ##  :warning: Caution
@@ -149,4 +151,4 @@ Please cite our paper if you use private_vision in your papers, as follows:
 ```
 
 ## Acknowledgement
-This code is largely based on https://github.com/lxuechen/private-transformers and https://github.com/pytorch/opacus (v0.15).
+This code is largely based on https://github.com/lxuechen/private-transformers (v0.1.0) and https://github.com/pytorch/opacus (v0.15).
