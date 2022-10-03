@@ -128,7 +128,9 @@ for i, batch in enumerate(dataloader):
 * nn.Conv3d (this work)
 * nn.Linear (4D; this work)
 
-These modules allow us to train most of the models from `timm` (this list is non-exclusive):
+For unsupported modules, an error message will print out the module names and you need to mannually freeze them to not require gradient.
+
+As a consequence, we can privately train most of the models from `timm` (this list is non-exclusive):
 ```python
 ...
 ```
