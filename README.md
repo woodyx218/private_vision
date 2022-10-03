@@ -54,14 +54,14 @@ Privately training vision models is simple:
 1. Create the model and any optimizer
 2. Attach this optimizer to our `PrivacyEngine` (this essentially adds Pytorch hooks for per-sample clipping)
 3. Compute per-example losses (setting `reduction=='none'`) for a mini-batch of data
-4. Pass the loss to `optimizer.step` or `optimizer.virtual_step` without calling the `backward` function (this is implicitly called in the `PrivacyEngine`)
+4. Pass the loss to `optimizer.step` or `optimizer.virtual_step` without calling the `backward` function (this is implicitly called inside `PrivacyEngine`)
 
 
 Below is a quick example of using our codebase for training CNN models with mixed ghost clipping:
 
 ```python
 import torchvision, torch, opacus
-from private_CNN import PrivacyEngine
+from private_vision import PrivacyEngine
 
 model = torchvision.models.resnet18()
 
@@ -95,8 +95,8 @@ In the above `PrivacyEngine`,
 A special use of our privacy engine is to use the gradient accumulation. This is achieved with virtual step function.
 
 ```python
-import torchvision, torch, timm
-from private_CNN import PrivacyEngine
+import torchvision, torch
+from private_vision import PrivacyEngine
 
 gradient_accumulation_steps = 10  
 
@@ -138,7 +138,7 @@ These modules allow us to train the following models from `timm` (this list is n
 -->
 
 ## Citation
-Please cite our paper if you use private_CNN in your papers, as follows:
+Please cite our paper if you use private_vision in your papers, as follows:
 ```
 @article{bu2022scalable,
   title={Scalable and Efficient Training of Large Convolutional Neural Networks with Differential Privacy},
