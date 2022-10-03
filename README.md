@@ -134,6 +134,7 @@ As a consequence, we can privately train most of the models from `timm` (this li
 ```python
 ...
 ```
+We also support models in `torchvision` and other vision libraries.
 
 <!--
 ##  :warning: Caution
