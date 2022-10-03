@@ -132,11 +132,11 @@ For unsupported modules, an error message will print out the module names and yo
 
 As a consequence, we can privately train most of the models from `timm` (this list is non-exclusive):
 ```python
-beit_base_patch16_224, beit_large_patch16_224, cait_s24_224, cait_xxs24_224, convit_base, convit_small, convit_tiny, convnext_base, convnext_large, crossvit_9_240, crossvit_15_240, crossvit_18_240, crossvit_base_240, crossvit_small_240, crossvit_tiny_240, deit3_base_patch16_224, deit_small_patch16_224, deit_tiny_patch16_224, dla34, dla60, dla102, dla169, ecaresnet50d, ecaresnet101d, ecaresnet269d, resnet18, resnet34, resnet50, resnet101, resnet152,
+beit_base_patch16_224, beit_large_patch16_224, cait_s24_224, cait_xxs24_224, convit_base, convit_small, convit_tiny, convnext_base, convnext_large, crossvit_9_240, crossvit_15_240, crossvit_18_240, crossvit_base_240, crossvit_small_240, crossvit_tiny_240, deit3_base_patch16_224, deit_small_patch16_224, deit_tiny_patch16_224, dla34, dla60, dla102, dla169, ecaresnet50d, ecaresnet101d, ecaresnet269d, gluon_resnet18_v1b, gluon_resnet34_v1b, gluon_resnet50_v1b, gluon_resnet101_v1b, gluon_resnet152_v1b, gluon_resnet152_v1d, gluon_resnet152_v1s, hrnet_w18, hrnet_w32, hrnet_w48, ig_resnext101_32x8d, inception_v3, inception_v3, jx_nest_base, legacy_senet154, legacy_seresnet18, legacy_seresnet152, mixer_b16_224, mixer_l16_224, resnet18, resnet34, resnet50, resnet101, resnet152,
 
 
 ```
-We also support models in `torchvision` and other vision libraries.
+We also support models in `torchvision` and other vision libraries, e.g. `densenet121, densnet161, densenet201`.
 
 <!--
 ##  :warning: Caution
