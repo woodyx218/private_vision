@@ -62,6 +62,7 @@ def prepare(args):
     net = timm.create_model(args.model,pretrained=args.pretrained,num_classes=NUM_CLASSES)
     net = ModuleValidator.fix(net)
     net = net.to(device)
+    
     if 'xcit' in args.model:
       for name,param in net.named_parameters():
           if 'gamma' in name or 'attn.temperature' in name:
@@ -71,6 +72,11 @@ def prepare(args):
       for name,param in net.named_parameters():
           if 'gamma_' in name:
             param.requires_grad=False
+
+    if 'convnext' in args.model:
+        for name,param in net.named_parameters():
+            if '.gamma' in name or 'head.norm.' in name or 'downsample.0' in name or 'stem.1' in name:
+                param.requires_grad=False
 
     if 'convit' in args.model:
         for name,param in net.named_parameters():
