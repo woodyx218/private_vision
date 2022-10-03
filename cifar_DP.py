@@ -105,7 +105,7 @@ def prepare(args):
             noise_multiplier=sigma,
             epochs=args.epochs,
             max_grad_norm=args.grad_norm,
-            ghost_clipping=True,
+            ghost_clipping='non' not in args.mode,
             mixed='mixed' in args.mode
         )
         privacy_engine.attach(optimizer)
