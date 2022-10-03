@@ -51,7 +51,7 @@ def prepare(args):
         trainset, batch_size=args.bs, shuffle=True, num_workers=2)
     else:
       trainloader = torch.utils.data.DataLoader(
-        trainset, batch_size=args.mini_batch_size, shuffle=True, num_workers=2)
+        trainset, batch_size=args.mini_bs, shuffle=True, num_workers=2)
 
     testloader = torch.utils.data.DataLoader(
         testset, batch_size=100, shuffle=False, num_workers=2)
@@ -88,7 +88,7 @@ def prepare(args):
 
     optimizer = optim.Adam(net.parameters(), lr=args.lr)
 
-    n_acc_steps = args.bs // args.mini_batch_size
+    n_acc_steps = args.bs // args.mini_bs
 
     if 'ghost' in args.mode:
         sigma = get_noise_multiplier(
@@ -172,18 +172,18 @@ def main(epochs, trainf, testf, args):
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
+    parser = argparse.ArgumentParser(description='PyTorch CIFAR Training')
     parser.add_argument('--lr', default=0.001, type=float, help='learning rate')
     parser.add_argument('--epochs', default=1, type=int,
                         help='numter of epochs')
     parser.add_argument('--bs', default=1000, type=int, help='batch size')
     parser.add_argument('--eps', default=2, type=float, help='target epsilon')
-    parser.add_argument('--grad-norm', '-gn', default=0.1,
+    parser.add_argument('--grad_norm', '-gn', default=0.1,
                         type=float, help='max grad norm')
     parser.add_argument('--mode', default='unfold-flex-mem',
                         type=str, help='unfold, unfold-flex, opacus or non-private')
-    parser.add_argument('--model', default='ResNet18', type=str)
-    parser.add_argument('--mini_batch_size', type=int, default=50)
+    parser.add_argument('--model', default='resnet18', type=str)
+    parser.add_argument('--mini_bs', type=int, default=50)
     parser.add_argument('--pretrained', type=int, default=1)
     parser.add_argument('--cifar_data', type=str, default='CIFAR10')
 
