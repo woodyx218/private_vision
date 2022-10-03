@@ -30,6 +30,8 @@ setuptools.setup(
         "transformers",
         "numpy",
         "scipy",
+        "opacus>=1.0",
+        "timm>=6.2",
     ],
     python_requires='~=3.8',
     classifiers=[
