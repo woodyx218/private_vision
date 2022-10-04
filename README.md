@@ -132,9 +132,13 @@ For unsupported modules, an error message will print out the module names and yo
 
 As a consequence, we can privately train most of the models from `timm` (this list is non-exclusive):
 ```python
-beit_base_patch16_224, beit_large_patch16_224, cait_s24_224, cait_xxs24_224, convit_base, convit_small, convit_tiny, convnext_base, convnext_large, crossvit_9_240, crossvit_15_240, crossvit_18_240, crossvit_base_240, crossvit_small_240, crossvit_tiny_240, deit3_base_patch16_224, deit_small_patch16_224, deit_tiny_patch16_224, dla34, dla60, dla102, dla169, ecaresnet50d, ecaresnet101d, ecaresnet269d, gluon_resnet18_v1b, gluon_resnet34_v1b, gluon_resnet50_v1b, gluon_resnet101_v1b, gluon_resnet152_v1b, gluon_resnet152_v1d, gluon_resnet152_v1s, hrnet_w18, hrnet_w32, hrnet_w48, ig_resnext101_32x8d, inception_v3, inception_v3, jx_nest_base, legacy_senet154, legacy_seresnet18, legacy_seresnet152, mixer_b16_224, mixer_l16_224, pit_b_224, pvt_v2_b1, pvt_v2_b4, res2net50_14w_8s, res2next50, resnest50d, resnet18, resnet34, resnet50, resnet101, resnet152, resnext50_32x4d, resnext101_32x8d, 
+beit_base_patch16_224, beit_large_patch16_224, cait_s24_224, cait_xxs24_224, convit_base, convit_small, convit_tiny, convnext_base, convnext_large, crossvit_9_240, crossvit_15_240, crossvit_18_240, crossvit_base_240, crossvit_small_240, crossvit_tiny_240, deit3_base_patch16_224, deit_small_patch16_224, deit_tiny_patch16_224,
 
-vgg11, vgg11_bn, vgg13, vgg16, vgg19, visformer_small, vit_base_patch16_224, vit_base_patch32_224, vit_large_patch16_224, vit_small_patch16_224, vit_tiny_patch16_224, volo_d1_224, wide_resnet50_2, wide_resnet101_2, xception, xcit_large_24_p16_224, xcit_medium_24_p16_224, xcit_small_24_p16_224, xcit_tiny_24_p16_224            
+dla34, dla102, dla169, ecaresnet50d, ecaresnet269d, gluon_resnet18_v1b, gluon_resnet50_v1b, gluon_resnet152_v1b, gluon_resnet152_v1d, gluon_resnet152_v1s, hrnet_w18, hrnet_w48, ig_resnext101_32x8d, inception_v3, jx_nest_base, legacy_senet154, legacy_seresnet18, legacy_seresnet152, mixer_b16_224, mixer_l16_224, pit_b_224, pvt_v2_b1,
+
+resnet18, resnet34, resnet50, resnet101, resnet152, resnext50_32x4d, res2net50_14w_8s, res2next50, resnest50d, seresnet50, seresnext50_32x4d, ssl_resnet50, ssl_resnext50_32x4d, swsl_resnet50, swsl_resnext50_32x4d, tv_resnet152, tv_resnext50_32x4d, twins_pcpvt_base, twins_pcpvt_large, twins_svt_base, twins_svt_large   
+
+vgg11, vgg11_bn, vgg13, vgg16, vgg19, visformer_small, vit_base_patch16_224, vit_base_patch32_224, vit_large_patch16_224, vit_small_patch16_224, vit_tiny_patch16_224, volo_d1_224, wide_resnet50_2, wide_resnet101_2, xception, xcit_large_24_p16_224, xcit_medium_24_p16_224, xcit_small_24_p16_224, xcit_tiny_24_p16_224
 ```
 We also support models in `torchvision` and other vision libraries, e.g. `densenet121, densnet161, densenet201`.
 
