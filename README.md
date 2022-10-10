@@ -87,7 +87,7 @@ loss = F.cross_entropy(model(batch), labels, reduction="none")
 optimizer.step(loss=loss)
 ```
 
-In the above `PrivacyEngine`,
+In the above `PrivacyEngine`, which shares the design of Opacus v0.15,
 * setting `ghost_clipping=True, mixed=True` implements the best method, mixed ghost clipping; 
 * setting keywords `ghost_clipping=True, mixed=False` implements the ghost clipping, which are very memory-costly for large images (e.g. failing to fit a single 400X400 image into ResNet18 with a 16GB GPU); 
 * setting `ghost_clipping=False` implements a similar approach to Opacus, which needs to instantiate the per-sample gradients that are very memory-costly.
