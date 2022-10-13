@@ -46,11 +46,7 @@ def prepare(args):
       testset = torchvision.datasets.CIFAR100(
         root='/data', train=False, download=True, transform=transform_test)
  
-    if 'opacus' in args.mode:
-      trainloader = torch.utils.data.DataLoader(
-        trainset, batch_size=args.bs, shuffle=True, num_workers=2)
-    else:
-      trainloader = torch.utils.data.DataLoader(
+    trainloader = torch.utils.data.DataLoader(
         trainset, batch_size=args.mini_bs, shuffle=True, num_workers=2)
 
     testloader = torch.utils.data.DataLoader(
@@ -196,8 +192,7 @@ if __name__ == '__main__':
     parser.add_argument('--eps', default=2, type=float, help='target epsilon')
     parser.add_argument('--grad_norm', '-gn', default=0.1,
                         type=float, help='max grad norm')
-    parser.add_argument('--mode', default='ghost_mixed',
-                        type=str, help='unfold, unfold-flex, opacus or non-private')
+    parser.add_argument('--mode', default='ghost_mixed')
     parser.add_argument('--model', default='resnet18', type=str)
     parser.add_argument('--mini_bs', type=int, default=50)
     parser.add_argument('--pretrained', type=int, default=1)
