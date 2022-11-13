@@ -355,7 +355,10 @@ class PrivacyEngine(object):
     def get_coef_sample(self):
         """Get per-example gradient scaling factor for clipping."""
         norm_sample = self.get_norm_sample()
-        return torch.clamp_max(self.max_grad_norm / (norm_sample + self.numerical_stability_constant), 1.)
+        if self.clip_function=='vanilla':
+            return torch.clamp_max(self.max_grad_norm / (norm_sample + self.numerical_stability_constant), 1.)
+        elif self.clip_function=='global':
+            return norm_sample < self.max_grad_norm
 
     # ---------------------------------------------
 
