@@ -33,7 +33,7 @@ setuptools.setup(
         "opacus>=1.0",
         "timm>=0.6.2",
     ],
-    python_requires='~=3.8',
+    python_requires='~=3.7',
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
