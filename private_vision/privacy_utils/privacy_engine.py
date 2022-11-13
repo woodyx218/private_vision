@@ -54,6 +54,7 @@ class PrivacyEngine(object):
         # Accounting specifics.
         accounting_mode="rdp_cks",
         eps_error=0.05,
+        clip_function='vanilla',
         **unused_kwargs,
     ):
         """Initialize the engine.
@@ -177,6 +178,8 @@ class PrivacyEngine(object):
                 autograd_grad_sample.set_hooks_mode("ghost_norm")
 
         # transformers_support.forward_swapper(module=module)
+        
+        self.clip_function=clip_function
 
     def lock(self):
         self._locked = True
@@ -513,9 +516,13 @@ class PrivacyEngine(object):
             runtime_error.args = (args[0] + extra_msg, *args[1:])
             raise runtime_error
 
-        coef_sample = torch.clamp_max(
-            self.max_grad_norm * scale / (norm_sample + self.numerical_stability_constant), 1.
-        )
+        if self.clip_function=='vanilla':
+            coef_sample = torch.clamp_max(
+                self.max_grad_norm * scale / (norm_sample + self.numerical_stability_constant), 1.
+            )
+        elif self.clip_function=='global':
+            coef_sample = (norm_sample< self.max_grad_norm * scale)
+            
         for name, param in self.named_params:
             if not hasattr(param, 'summed_grad'):
                 param.summed_grad = 0.
