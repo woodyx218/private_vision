@@ -359,6 +359,10 @@ class PrivacyEngine(object):
             return torch.clamp_max(self.max_grad_norm / (norm_sample + self.numerical_stability_constant), 1.)
         elif self.clip_function=='global':
             return norm_sample < self.max_grad_norm
+        elif self.clip_function=='autov':
+            return self.max_grad_norm / norm_sample
+        elif self.clip_function=='autos':
+            return self.max_grad_norm / (norm_sample + self.numerical_stability_constant)
 
     # ---------------------------------------------
 
@@ -525,6 +529,10 @@ class PrivacyEngine(object):
             )
         elif self.clip_function=='global':
             coef_sample = (norm_sample< self.max_grad_norm * scale)
+        elif self.clip_function=='autov':
+            coef_sample = self.max_grad_norm * scale / norm_sample
+        elif self.clip_function=='autos':
+            coef_sample = self.max_grad_norm * scale / (norm_sample + self.numerical_stability_constant)
             
         for name, param in self.named_params:
             if not hasattr(param, 'summed_grad'):
