@@ -276,7 +276,7 @@ def _compute_conv_grad_sample(layer, A: torch.Tensor, B: torch.Tensor, batch_dim
             #gnorm = torch.sqrt(torch.einsum('bij, bij -> b', a, g))
         else:
             grads = torch.einsum(
-                'bdT, bpT-> bdp', unfold_x, g_)
+                'bdT, bpT-> bpd', unfold_x, g_)
             gnorm = torch.sqrt(torch.sum(grads**2, dim=(1, 2)))
         _create_or_extend_norm_sample(layer.weight, gnorm)
 
