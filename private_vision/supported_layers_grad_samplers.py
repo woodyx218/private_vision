@@ -190,9 +190,12 @@ def _compute_group_norm_grad_sample(
 
     is_backward_ghost_norm = "ghost_norm" in autograd_grad_sample.get_hooks_mode()
 
-    weight_grad_sample = torch.einsum(
-        "ni...->n...", F.group_norm(A, layer.num_groups, eps=layer.eps) * B)
-    bias_grad_sample = torch.einsum("ni...->n...", B)
+    weight_grad_sample = sum_over_all_but_batch_and_last_n(
+        F.group_norm(A, layer.num_groups, eps=layer.eps) * B,
+        layer.weight.dim(),
+    )
+    bias_grad_sample = sum_over_all_but_batch_and_last_n(B,layer.bias.dim())
+    
     if is_backward_ghost_norm:
         _create_or_extend_norm_sample(layer.weight, weight_grad_sample.norm(2, dim=1))
         if layer.bias is not None:
