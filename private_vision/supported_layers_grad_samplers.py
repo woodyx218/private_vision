@@ -121,9 +121,9 @@ def _compute_linear_grad_sample(layer: nn.Linear, A: torch.Tensor, B: torch.Tens
                 layer.weight, _light_linear_weight_norm_sample(A, B))
         else:
             if A.dim()==2:
-                grads = torch.einsum('bd, bp-> bdp', A, B)
+                grads = torch.einsum('bd, bp-> bpd', A, B)
             else:
-                grads = torch.einsum('bTd, bTp-> bdp', A, B)
+                grads = torch.einsum('bTd, bTp-> bpd', A, B)
             gnorm = torch.sqrt(torch.sum(grads**2, dim=(1, 2)))
             _create_or_extend_norm_sample(layer.weight, gnorm)
 
