@@ -358,7 +358,7 @@ class PrivacyEngine(object):
         if self.clip_function=='vanilla':
             return torch.clamp_max(self.max_grad_norm / (norm_sample + self.numerical_stability_constant), 1.)
         elif self.clip_function=='global':
-            return norm_sample < self.max_grad_norm
+            return (norm_sample < self.max_grad_norm).float()
         elif self.clip_function=='autov':
             return self.max_grad_norm / norm_sample
         elif self.clip_function=='autos':
