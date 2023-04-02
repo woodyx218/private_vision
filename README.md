@@ -1,4 +1,4 @@
-# private_vision
+# PrivateVision
 
 This Pytorch codebase implements efficient training of differentially private (DP) vision neural networks (CNN, including convolutional Vision Transformers), using [mixed ghost per-sample gradient clipping](https://arxiv.org/pdf/2205.10683.pdf).
 
@@ -149,7 +149,7 @@ We also support models in `torchvision` and other vision libraries, e.g. `densen
 -->
 
 ## Citation
-Please cite our paper if you use private_vision in your papers, as follows:
+Please cite our paper if you use PrivateVision in your papers, as follows:
 ```
 @article{bu2022scalable,
   title={Scalable and Efficient Training of Large Convolutional Neural Networks with Differential Privacy},
