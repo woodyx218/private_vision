@@ -152,9 +152,11 @@ We also support models in `torchvision` and other vision libraries, e.g. `densen
 Please cite our paper if you use PrivateVision in your papers, as follows:
 ```
 @article{bu2022scalable,
-  title={Scalable and Efficient Training of Large Convolutional Neural Networks with Differential Privacy},
+  title={Scalable and efficient training of large convolutional neural networks with differential privacy},
   author={Bu, Zhiqi and Mao, Jialin and Xu, Shiyun},
-  journal={arXiv preprint arXiv:2205.10683},
+  journal={Advances in Neural Information Processing Systems},
+  volume={35},
+  pages={38305--38318},
   year={2022}
 }
 ```
